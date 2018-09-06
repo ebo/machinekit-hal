@@ -1,7 +1,6 @@
 etc/linuxcnc/*
 etc/rsyslog.d/linuxcnc.conf
 etc/security/limits.d/machinekit.conf
-etc/udev/rules.d/50-shmdrv.rules
 usr/lib/*.so.*
 usr/bin/*
 usr/lib/python*/*/*.py
@@ -20,7 +19,7 @@ usr/libexec/linuxcnc/pci_write
 usr/libexec/linuxcnc/inivar
 usr/libexec/linuxcnc/flavor
 usr/libexec/linuxcnc/rtapi_msgd
-usr/libexec/linuxcnc/rtapi_app_posix
+usr/libexec/linuxcnc/rtapi_app
 etc/modprobe.d/linuxcnc.conf
 usr/lib/*.so
 usr/lib/linuxcnc/ulapi-posix.so
