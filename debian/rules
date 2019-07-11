@@ -121,6 +121,7 @@ ifneq ($(wildcard src/configure src/Makefile.inc),)
 	    src/configure \
 	    src/machinekitcfg.py-tmp
 	rm -rf src/autom4te.cache etc
+
 endif
 
 #	# Remove package artifacts

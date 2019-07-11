@@ -8,10 +8,6 @@
 #error "This driver is for the beaglebone platform only"
 #endif
 
-#if !defined(BUILD_SYS_USER_DSO)
-#error "This driver is for usermode threads only"
-#endif
-
 // try to make sense of IEP and ECAP counters
 // not part of debugging
 #define EXPLORE_COUNTERS 1
@@ -442,7 +438,7 @@ static void *pruevent_thread(void *arg)
 	*(hal_pru->events) = (unsigned) event_count;
 	rtapi_print_msg(RTAPI_MSG_ERR, "%s: PRU event %d received count=%d\n",
 			modname, event, event_count);
-	prussdrv_pru_clear_event(*(hal_pru->prunum) ? PRU1_ARM_INTERRUPT : PRU0_ARM_INTERRUPT);
+	prussdrv_pru_clear_event(event, *(hal_pru->prunum) ? PRU1_ARM_INTERRUPT : PRU0_ARM_INTERRUPT);
     } while (1);
     rtapi_print_msg(RTAPI_MSG_ERR, "%s: pruevent_thread exiting\n",
 		    modname);

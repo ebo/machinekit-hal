@@ -4,8 +4,11 @@
 #
 # Configure source package dependencies
 
-# List of supported kernel arches for kthreads
-KTHREAD_ARCHES="i386 amd64"
+# Distro info
+#
+# This should run on non-Debian distros; lsb_release is only used for
+# TCL/TK version detection, which can be passed in through the '-t
+# VERSION' switch
 if test -x /usr/bin/lsb_release; then
     DISTRO_ID=$(lsb_release -is)  # Debian or Ubuntu
     DISTRO_RELEASE=$(lsb_release -rs)   # 8.1, 14.04, etc.
@@ -84,14 +87,13 @@ test "$1" != --help || usage
 # These need to be in a certain order:
 # - Base template copy first
 # - do_<flavor> functions next
-# - replace BUILD_DEPS and *_KERNEL_HEADERS last
+# - replace BUILD_DEPS last
 #   (when lists are fully populated)
 
 # set defaults
 BUILD_DEPS=  # List of Build-Depends
-DEPS= # List of Depends
+DEPS=        # List of Depends
 HAVE_FLAVOR=false
-HAVE_KTHREADS_FLAVOR=false
 
 case "$DISTRO_CODENAME" in
     buster)
