@@ -41,7 +41,6 @@ run_and_log() {
     outpipe=pipe-stdout-$$
 
     # create two named pipes (and ensure they're cleaned up)
-    trap "rm -f $errpipe $outpipe; exit" EXIT
     mkfifo $errpipe $outpipe
 
     # start a 'tee' reading from each named pipe and echoing to stdout and
@@ -227,8 +226,18 @@ if test "$1" = "-l"; then
     exit $?
 fi
 
+
+exit_handler() {
+    test -z "$*" || echo "$*" >&2
+    trap EXIT
+    rm -rf $TMPDIR $testdir/pipe-std{out,err}-* $errpipe $outpipe
+    exit 1
+}
+
 TMPDIR=`mktemp -d /tmp/runtest.XXXXXX`
-trap "rm -rf $TMPDIR" 0 1 2 3 9 15
+EXIT_HANDLER_SIGNALS="1 2 3 9 15"
+trap "exit_handler Caught interrupt" $EXIT_HANDLER_SIGNALS
+trap "exit_handler" EXIT
 
 CLEAN_ONLY=0
 NOCLEAN=0
