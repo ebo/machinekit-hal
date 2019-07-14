@@ -59,7 +59,7 @@
 #include <syslog_async.h>
 #include <limits.h>
 #include <sys/prctl.h>
-#include <inifile.h>
+#include <mk-inifile.h>
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/predicate.hpp>

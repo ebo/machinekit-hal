@@ -456,8 +456,8 @@ HEADERS := \
     hal/lib/hal_types.h \
     hal/lib/vtable.h \
     hal/drivers/hal_spi.h \
-    libnml/inifile/inifile.h \
-    libnml/inifile/inifile.hh \
+    libnml/inifile/mk-inifile.h \
+    libnml/inifile/mk-inifile.hh \
     machinetalk/build/machinetalk/protobuf/message.pb.h \
     machinetalk/build/machinetalk/protobuf/types.pb.h \
     machinetalk/build/machinetalk/protobuf/canon.npb.h \
