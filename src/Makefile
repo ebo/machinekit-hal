@@ -422,6 +422,7 @@ INFILES = \
 	../scripts/gen-rtapi.ini.sh \
 	Makefile.inc \
 	Makefile.modinc \
+	Makefile.modinc.lcnc \
 	../scripts/halrun \
 	../scripts/haltcl \
 	../scripts/rip-environment
@@ -519,6 +520,8 @@ HEADERS := \
     rtapi/rtapi_limits.h \
     rtapi/rtapi_math.h \
     rtapi/rtapi_math64.h \
+    rtapi/rtapi_stdint.h \
+    rtapi/rtapi_bool.h \
     rtapi/rtapi_common.h \
     rtapi/rtapi_exception.h \
     rtapi/rtapi_global.h \

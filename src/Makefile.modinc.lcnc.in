@@ -1,0 +1,105 @@
+# -*-makefile-gmake-*-
+#
+# Makefile.modinc.lcnc includes rules for LinuxCNC to build against an
+# external Machinekit HAL.  It has three useful targets:
+#
+# modules
+#   Actually build the modules
+#
+# clean
+#   Cleans up files made by 'modules'
+#
+# install
+#   Installs the modules
+
+# An example Makefile using Makefile.modinc to build one kernel module from a
+# single source file would read:
+#
+# obj-m += example.o
+# include .../Makefile.modinc
+
+# An example Makefile using Makefile.modinc to build one kernel module from
+# several source files would read:
+#
+# obj-m += complex.o
+# complex-objs := complex1.o complex2.o complex_main.o
+# include .../Makefile.modinc
+
+# Currently this Makefile is only suitable for 'kbuild' and 'sim' systems, but
+# there is no technical reason it cannot be extended to pre-kbuild systems.
+
+# When there is a single module and it consists of a single source file, an
+# easier way to build modules is to invoke 'comp':
+#  comp --compile example.c
+# or
+#  comp --install example.c
+
+
+MK_INCLUDE_DIR = @prefix@/include
+MK_LIB_DIR=@EMC2_HOME@/lib
+MK_BIN_DIR=@EMC2_BIN_DIR@
+
+EMC2_RTLIB_BASE_DIR=@EMC2_RTLIB_DIR@
+EMC2_RTLIB_DIR=$(EMC2_RTLIB_BASE_DIR)/modules
+
+# architecture-dependent optimizations
+ARCH_CFLAGS=@ARCH_CFLAGS@
+
+# /Standard configure directories
+RTOPT:=-O2 	$(ARCH_CFLAGS)
+ULOPT:=-O2	$(ARCH_CFLAGS)
+
+ULFLAGS = -D_GNU_SOURCE -DLOCALE_DIR=\"$(localedir)\" -DPACKAGE=\"$(package)\"
+
+CC = @CC@
+OBJCOPY = @OBJCOPY@
+LD = @LD@
+CROSS_COMPILING = @CROSS_COMPILING@
+PKG_CONFIG = @PKG_CONFIG@
+
+
+EXTRA_CFLAGS := -DRTAPI -D_GNU_SOURCE -D_FORTIFY_SOURCE=0 \
+	-D__MODULE__ \
+	$(call cc-option,-mieee-fp) \
+	$(KERNEL_MATH_CFLAGS)
+
+RTLIBDIR := $(EMC2_RTLIB_DIR)
+INCLUDE += -I$(MK_INCLUDE_DIR)
+
+EXTRA_CFLAGS +=  -fPIC -g -funwind-tables
+
+# The -DLCNC_COMPAT flag turns on compatibility code in MK-HAL
+override CFLAGS += -DLCNC_COMPAT
+override CXXFLAGS += -DLCNC_COMPAT
+
+# The liblinuxcnculapi.so library has e.g. rtapi_print_msg; this is
+# built into liblinuxcnchal.so in LCNC
+LIB_LCNCULAPI = $(LIB_DIR)/liblinuxcnculapi.so
+
+allmodules = $(patsubst %.o,%.so,$(obj-m))
+modules: $(allmodules)
+
+install-modules: modules
+	cp $(allmodules) $(DESTDIR)$(RTLIBDIR)/
+
+install-modules: install
+
+getobjs = $(if $(filter undefined, $(origin $(1)-objs)), $(1).o, $($(1)-objs))
+getsrcs = $(patsubst %.o,%.c,$(call getobjs,$(1)))
+
+maks := $(patsubst %.o,.%.modinc,$(obj-m))
+$(foreach mod,$(patsubst %.o,%,$(obj-m)),\
+	$(eval $(mod).so: $(call getobjs,$(mod))))
+%.o: %.c
+	$(ECHO) Compiling realtime $<
+	$(Q)$(CC) -o $@ $(EXTRA_CFLAGS) -c $<
+
+.PHONY: %.so
+%.so:
+	$(ECHO) Linking $(notdir $@)
+	$(Q)$(LD) -d -r -o $*.tmp $^
+	$(Q)objcopy -j .rtapi_export -O binary $*.tmp $*.exported
+
+	$(Q)(echo '{ global : '; tr -s '\0' <$*.exported | xargs -r0 printf '%s;\n' | grep .; echo 'local : * ; };') > $*.ver
+	$(Q)$(CC) -shared -Bsymbolic $(LDFLAGS) -Wl,--version-script,$*.ver -o $@ $^ $(EXTRA_LDFLAGS)
+	$(Q)ld -d -r -o $*.tmp $^
