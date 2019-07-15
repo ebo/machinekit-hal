@@ -147,6 +147,10 @@ install: build
 	mkdir -p debian/tmp/usr/lib/linuxcnc/prubin
 
 	dh_install --sourcedir=debian/tmp -Xusr/bin/pasm --fail-missing -v
+#	# Don't install /usr/bin/comp in machinekit-hal package
+#	# Ugly, but nothing better exists
+	rm debian/tmp/usr/bin/comp
+
 	# Eventually this will replace the above
 	# dh_install -Xusr/bin/pasm -v
 	# dh_missing --fail-missing
