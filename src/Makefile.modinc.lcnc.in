@@ -57,6 +57,7 @@ LD = @LD@
 CROSS_COMPILING = @CROSS_COMPILING@
 PKG_CONFIG = @PKG_CONFIG@
 
+MODULE_EXT = .so
 
 EXTRA_CFLAGS := -DRTAPI -D_GNU_SOURCE -D_FORTIFY_SOURCE=0 \
 	-D__MODULE__ \
@@ -75,6 +76,9 @@ override CXXFLAGS += -DLCNC_COMPAT
 # The liblinuxcnculapi.so library has e.g. rtapi_print_msg; this is
 # built into liblinuxcnchal.so in LCNC
 LIB_LCNCULAPI = $(LIB_DIR)/liblinuxcnculapi.so
+LIB_RTAPI_MATH = $(LIB_DIR)/librtapi_math.so.0
+
+default: userspace modules
 
 allmodules = $(patsubst %.o,%.so,$(obj-m))
 modules: $(allmodules)
@@ -82,7 +86,7 @@ modules: $(allmodules)
 install-modules: modules
 	cp $(allmodules) $(DESTDIR)$(RTLIBDIR)/
 
-install-modules: install
+install: install-modules
 
 getobjs = $(if $(filter undefined, $(origin $(1)-objs)), $(1).o, $($(1)-objs))
 getsrcs = $(patsubst %.o,%.c,$(call getobjs,$(1)))

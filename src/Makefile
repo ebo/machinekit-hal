@@ -712,6 +712,7 @@ install-kernel-indep: install-dirs
 	$(FILE) $(USERPCI_HEADERS) $(DESTDIR)$(includedir)/linuxcnc/userpci
 	$(FILE) Makefile.modinc $(DESTDIR)$(datadir)/linuxcnc
 	$(FILE) Makefile.inc $(DESTDIR)$(datadir)/linuxcnc
+	$(FILE) Makefile.modinc.lcnc $(DESTDIR)$(datadir)/linuxcnc
 
 	$(FILE) rtapi/rsyslogd-linuxcnc.conf $(DESTDIR)$(sysconfdir)/rsyslog.d/linuxcnc.conf
 	$(FILE) rtapi/shmdrv/limits.d-machinekit.conf \
