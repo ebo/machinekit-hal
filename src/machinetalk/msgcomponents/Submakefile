@@ -25,6 +25,9 @@ $(eval $(call c_comp_build_rules,machinetalk/msgcomponents/pbmsgs.o, \
 	$(PBGEN)/$(NAMESPACEDIR)/value.npb.o \
 ))
 
+$(call TORTOBJS,$(PBGEN)/$(NAMESPACEDIR)/%.npb.c): \
+	EXTRA_CFLAGS += $(PROTO_NANOPB_CFLAGS)
+
 #$$(eval $(call c_comp_build_rules,machinetalk/msgcomponents/pbring.o))
 
 ../include/%.h: ./$(MSGCOMP_DIR)/%.h
