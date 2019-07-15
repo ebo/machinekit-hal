@@ -150,7 +150,7 @@ install: build
 	dh_install --sourcedir=debian/tmp -Xusr/bin/pasm --fail-missing -v
 #	# Don't install /usr/bin/comp in machinekit-hal package
 #	# Ugly, but nothing better exists
-	rm debian/tmp/usr/bin/comp
+	rm debian/machinekit-hal/usr/bin/comp
 
 	# Eventually this will replace the above
 	# dh_install -Xusr/bin/pasm -v
