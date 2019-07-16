@@ -34,8 +34,12 @@
 # or
 #  comp --install example.c
 
-
+MK_RUN_IN_PLACE = @RUN_IN_PLACE@
+ifeq "$(MK_RUN_IN_PLACE)" "no"
+MK_INCLUDE_DIR = @prefix@/include/linuxcnc
+else
 MK_INCLUDE_DIR = @prefix@/include
+endif
 MK_LIB_DIR=@EMC2_HOME@/lib
 MK_BIN_DIR=@EMC2_BIN_DIR@
 
@@ -65,7 +69,7 @@ EXTRA_CFLAGS := -DRTAPI -D_GNU_SOURCE -D_FORTIFY_SOURCE=0 \
 	$(KERNEL_MATH_CFLAGS)
 
 RTLIBDIR := $(EMC2_RTLIB_DIR)
-INCLUDE += -I$(MK_INCLUDE_DIR)
+INCLUDE += -I. -I$(MK_INCLUDE_DIR)
 
 EXTRA_CFLAGS +=  -fPIC -g -funwind-tables
 
@@ -77,33 +81,3 @@ override CXXFLAGS += -DLCNC_COMPAT
 # built into liblinuxcnchal.so in LCNC
 LIB_LCNCULAPI = $(LIB_DIR)/liblinuxcnculapi.so
 LIB_RTAPI_MATH = $(LIB_DIR)/librtapi_math.so.0
-
-default: userspace modules
-
-allmodules = $(patsubst %.o,%.so,$(obj-m))
-modules: $(allmodules)
-
-install-modules: modules
-	cp $(allmodules) $(DESTDIR)$(RTLIBDIR)/
-
-install: install-modules
-
-getobjs = $(if $(filter undefined, $(origin $(1)-objs)), $(1).o, $($(1)-objs))
-getsrcs = $(patsubst %.o,%.c,$(call getobjs,$(1)))
-
-maks := $(patsubst %.o,.%.modinc,$(obj-m))
-$(foreach mod,$(patsubst %.o,%,$(obj-m)),\
-	$(eval $(mod).so: $(call getobjs,$(mod))))
-%.o: %.c
-	$(ECHO) Compiling realtime $<
-	$(Q)$(CC) -o $@ $(EXTRA_CFLAGS) -c $<
-
-.PHONY: %.so
-%.so:
-	$(ECHO) Linking $(notdir $@)
-	$(Q)$(LD) -d -r -o $*.tmp $^
-	$(Q)objcopy -j .rtapi_export -O binary $*.tmp $*.exported
-
-	$(Q)(echo '{ global : '; tr -s '\0' <$*.exported | xargs -r0 printf '%s;\n' | grep .; echo 'local : * ; };') > $*.ver
-	$(Q)$(CC) -shared -Bsymbolic $(LDFLAGS) -Wl,--version-script,$*.ver -o $@ $^ $(EXTRA_LDFLAGS)
-	$(Q)ld -d -r -o $*.tmp $^
