@@ -69,13 +69,18 @@ EXTRA_CFLAGS := -DRTAPI -D_GNU_SOURCE -D_FORTIFY_SOURCE=0 \
 	$(KERNEL_MATH_CFLAGS)
 
 RTLIBDIR := $(EMC2_RTLIB_DIR)
-INCLUDE += -I. -I$(MK_INCLUDE_DIR)
 
-EXTRA_CFLAGS +=  -fPIC -g -funwind-tables
+# LCNC should include config.h first, then files in
+# /usr/include/linuxcnc, then its local directories.
+HAL_INCLUDES = -I. -I$(MK_INCLUDE_DIR)
+INCLUDE += $(HAL_INCLUDES)
+
+EXTRA_CFLAGS +=  -fPIC -g -funwind-tables $(HAL_INCLUDES)
 
 # The -DLCNC_COMPAT flag turns on compatibility code in MK-HAL
 override CFLAGS += -DLCNC_COMPAT
 override CXXFLAGS += -DLCNC_COMPAT
+EXTRA_CFLAGS +=  -DLCNC_COMPAT
 
 # The liblinuxcnculapi.so library has e.g. rtapi_print_msg; this is
 # built into liblinuxcnchal.so in LCNC
