@@ -1070,11 +1070,9 @@ int hal_export_functf(void (*funct) (void *, long),
     thread ID.  On failure, returns an error code as defined
     above.  Call only from realtime init code, not from user
     space or realtime code.
-    cpu_id is intented to bind the thread explicitly to a
-    specific CPU id.
 */
 extern int hal_create_thread(const char *name, unsigned long period_nsec,
-			     int uses_fp, int cpu_id);
+			     int uses_fp);
 
 // generic. delete a named thread, or all threads if name == NULL
 int halg_exit_thread(const int use_hal_mutex, const char *name);
