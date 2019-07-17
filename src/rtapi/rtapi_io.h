@@ -26,7 +26,6 @@
 
 #define RTAPI_IO		// for disabling parts of header files
 
-#include "config.h"		// build configuration
 #include "rtapi.h"		// these functions
 #include <sys/io.h>		/* inb(), outb() */
 
