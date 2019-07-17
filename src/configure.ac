@@ -52,7 +52,7 @@ AC_MSG_CHECKING(build toplevel)
 BUILD_TOPLEVEL="$(cd ..; pwd -P)"
 AC_MSG_RESULT($BUILD_TOPLEVEL)
 
-AC_CONFIG_HEADERS(config.h rtapi/rtapi.h)
+AC_CONFIG_HEADER(config.h)
 
 # Support some of the standard configure options for directories
 AC_PREFIX_DEFAULT(run-in-place)
@@ -2064,6 +2064,7 @@ AC_SUBST([SITEPY])
 ##############################################################################
 # files that get created by ./configure                                      #
 ##############################################################################
+AC_CONFIG_HEADER(rtapi/rtapi.h)
 AC_CONFIG_FILES([../scripts/gen-rtapi.ini.sh])
 AC_CONFIG_FILES([../scripts/halrun], [chmod +x ../scripts/halrun])
 AC_CONFIG_FILES([../scripts/rip-environment], [chmod +x ../scripts/rip-environment])
