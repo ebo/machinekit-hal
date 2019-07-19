@@ -1,4 +1,5 @@
 usr/bin/comp
+usr/bin/runtests
 usr/include/linuxcnc
 usr/lib/lib*.so
 usr/share/linuxcnc/Makefile.*

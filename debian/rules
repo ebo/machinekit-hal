@@ -147,9 +147,10 @@ install: build
 	mkdir -p debian/tmp/usr/lib/linuxcnc/prubin
 
 	dh_install --sourcedir=debian/tmp -Xusr/bin/pasm --fail-missing -v
-#	# Don't install /usr/bin/comp in machinekit-hal package
+#	# Don't install /usr/bin/{comp,runtests} in machinekit-hal package
 #	# Ugly, but nothing better exists
 	rm debian/machinekit-hal/usr/bin/comp
+	rm debian/machinekit-hal/usr/bin/runtests
 	rm debian/machinekit-hal/usr/share/linuxcnc/Makefile.*inc*
 
 
