@@ -581,7 +581,8 @@ clean: depclean modclean docclean
 	-rm -rf objects
 	-rm -f $(TARGETS)
 	-rm -rf ../rtlib ../libexec
-	rm -f ../etc/linuxcnc/rtapi.ini
+	rm -f ../etc/linuxcnc/*.ini
+	rm -f ../etc/linuxcnc/*.conf
 	-rm -f $(COPY_CONFIGS)
 	-rm -f $(RTLIBDIR)/*.so
 	-rm -f hal/components/conv_*.comp
@@ -706,6 +707,7 @@ install-kernel-indep: install-dirs
 	$(FILE) rtapi/shmdrv/limits.d-machinekit.conf \
 		$(DESTDIR)$(sysconfdir)/security/limits.d/machinekit.conf
 	$(FILE) ../etc/linuxcnc/machinekit.ini $(DESTDIR)$(sysconfdir)/linuxcnc
+	$(FILE) ../etc/linuxcnc/machinekit-hal.conf $(DESTDIR)$(sysconfdir)/linuxcnc
 	$(EXE) ../bin/mank $(DESTDIR)$(bindir)
 
 ifeq ($(BUILD_PYTHON),yes)
