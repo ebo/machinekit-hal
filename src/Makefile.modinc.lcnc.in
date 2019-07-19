@@ -40,8 +40,8 @@ MK_INCLUDE_DIR = @prefix@/include/linuxcnc
 else
 MK_INCLUDE_DIR = @prefix@/include
 endif
-MK_LIB_DIR=@EMC2_HOME@/lib
-MK_BIN_DIR=@EMC2_BIN_DIR@
+LIB_DIR=@EMC2_HOME@/lib
+BIN_DIR=@EMC2_BIN_DIR@
 
 EMC2_RTLIB_BASE_DIR=@EMC2_RTLIB_DIR@
 EMC2_RTLIB_DIR=$(EMC2_RTLIB_BASE_DIR)/modules
