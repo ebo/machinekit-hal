@@ -162,7 +162,7 @@ esac
 ###########################################################
 # Update new container image and add custom /etc/passwd
 
-if test -z "$NO_PULL"; then
+if test -n "$PULL_IMAGE"; then
     docker pull ${IMAGE}:${TAG}
 fi
 
