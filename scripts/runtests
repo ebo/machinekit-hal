@@ -187,9 +187,9 @@ run_tests () {
     echo "Runtest: $NUM tests run, $SUCC successful, $FAIL failed + $XFAIL expected"
     if [ $FAIL -ne 0 ]; then
 	echo "Failed: $FAIL_NAMES"
-	exit 1;
+	cleanup_and_exit 1;
     else
-	exit 0;
+	cleanup_and_exit 0;
     fi
 }
 
@@ -234,6 +234,12 @@ exit_handler() {
     exit 1
 }
 
+cleanup_and_exit() {
+    # Remove signal handler and exit
+    trap - ${EXIT_HANDLER_SIGNALS} EXIT
+    exit $1
+}
+
 TMPDIR=`mktemp -d /tmp/runtest.XXXXXX`
 EXIT_HANDLER_SIGNALS="1 2 3 9 15"
 trap "exit_handler Caught interrupt" $EXIT_HANDLER_SIGNALS
@@ -269,3 +275,5 @@ if [ $CLEAN_ONLY -eq 1 ]; then
 else
     run_tests "$@"
 fi
+
+cleanup_and_exit $?
