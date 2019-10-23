@@ -110,7 +110,7 @@ ifneq ($(wildcard src/configure src/Makefile.inc),)
 	    scripts/rip-environment \
 	    src/Makefile.inc \
 	    src/Makefile.modinc \
-	    src/Makefile.modinc.lcnc \
+	    share/linuxcnc/Makefile.modinc.lcnc \
 	    src/aclocal.m4 \
 	    src/config.h \
 	    src/config.h.in \
