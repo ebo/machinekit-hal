@@ -3058,7 +3058,7 @@ if test "$BUILD_PYTHON" = "yes"; then
 	AC_MSG_ERROR([Python missing.  Install it or specify --disable-python to skip the parts of Machinekit that depend on Python])
     fi
 
-    AX_PYTHON_DEVEL(>= 2.6)
+    AX_PYTHON_DEVEL(>= '2.6')
     AC_PRUNE_DEFAULT_LDFLAGS(PYTHON_LIBS)
 
 #    AC_MSG_CHECKING([match between tk and Tkinter versions])
@@ -3082,7 +3082,7 @@ if test "$BUILD_PYTHON" = "yes"; then
     AX_BOOST_PYTHON
 
     AC_MSG_CHECKING(for site-package location)
-    SITEPY=`$PYTHON -c 'import distutils.sysconfig; print distutils.sysconfig.get_python_lib(1)'`
+    SITEPY=`$PYTHON -c 'import distutils.sysconfig; print(distutils.sysconfig.get_python_lib(1))'`
     AC_MSG_RESULT($SITEPY)
 
     AC_CHECK_HEADERS(GL/gl.h GL/glu.h,[],[AC_MSG_ERROR([Required OpenGL header missing.  Install it, or specify --disable-python to skip the parts of Machinekit that depend on Python])])
