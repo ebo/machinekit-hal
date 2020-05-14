@@ -1172,7 +1172,7 @@ def read_options_file(infile):
         
         try:
             text_format.Merge(parts[1], opts)
-        except Exception, e:
+        except Exception as e:
             sys.stderr.write("%s:%d: " % (infile.name, i + 1) +
                              "Unparseable option line: '%s'. " % line +
                              "Error: %s\n" % str(e))
